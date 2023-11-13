@@ -1,10 +1,17 @@
-
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "5.5.0"
+    }
+  }
+}
 
 provider "google" {
-  credentials = file("learning-cloud-with-fpt-ac812a069ba6.json")
-
+  credentials = file("learning-cloud-with-fpt-754e9a8d8687.json")
   project = "learning-cloud-with-fpt"
 }
+
 
 
 
@@ -13,10 +20,9 @@ module "network" {
   project_name = var.project_name
 }
 
-# module "disk" {
-#   source = "./module/disk"
-#   depends_on = [ module.network ]
-# }
+module "static_ip" {
+  source = "./module/static_ip"
+}
 
 module "instance_template" {
   source = "./module/instance_template"
@@ -38,7 +44,6 @@ module "backend" {
   source = "./module/backend-service"
   backend_healthcheck = module.healthcheck.id
   project_name = var.project_name
-  # instance_group_link = module.instance_group.instance_group_link
   depends_on = [ module.instance_group , module.healthcheck]
 }
 
@@ -48,7 +53,8 @@ module "forwardingrules" {
   source = "./module/forwardingrules"
   project_name = var.project_name
   backend_url = module.backend.backend_url
-  depends_on = [ module.backend ]
+  depends_on = [ module.backend , module.static_ip]
+  static_ip = module.static_ip.static_ip_address
 }
 
 module "alert-policy" {

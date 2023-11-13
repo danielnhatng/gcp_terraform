@@ -8,18 +8,17 @@ resource "google_compute_instance_template" "my_instance_template" {
     boot         = true
     source_image = "projects/learning-cloud-with-fpt/global/images/ubuntu-nginx-image"
   }
-  # disk {
-  #   auto_delete = false
-  #   boot = false
-  #   source = "nhatnd19-disk"
+
+  # metadata = {
+  #   startup-script = <<-EOF
+  #     #!/bin/bash
+  #     apt-get update
+  #     apt-get install -y apache2
+  #     systemctl start apache2
+  #   EOF
   # }
-  metadata = {
-    startup-script = <<-EOF
-      #!/bin/bash
-      apt-get update
-      apt-get install -y apache2
-      systemctl start apache2
-    EOF
+  metadata =  {
+    startup-script = file("./${path.module}/startup.sh")
   }
   network_interface {
     network = var.network_link
@@ -29,7 +28,9 @@ resource "google_compute_instance_template" "my_instance_template" {
     automatic_restart   = true
     on_host_maintenance = "MIGRATE"
   }
-
-
-
 }
+
+
+# data "local_file" "name" {
+#   filename = "./startup.sh"
+# }

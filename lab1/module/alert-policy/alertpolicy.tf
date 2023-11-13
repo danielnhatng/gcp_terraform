@@ -7,14 +7,6 @@ resource "google_monitoring_notification_channel" "nhatnd19-gmail_notification" 
     }
 }
 
-# resource "google_monitoring_notification_channel" "nhat19-slack_notification" {
-#     display_name = "Slack Notification"
-#     type         = "slack"
-
-#     labels = {
-#         channel_name = "#gcp"  # Replace with your Slack channel name
-#     }
-# }
 
 resource "google_monitoring_alert_policy" "nhatnd19-alert-policy"{
     display_name = "VM Creation/Deletion Alert"

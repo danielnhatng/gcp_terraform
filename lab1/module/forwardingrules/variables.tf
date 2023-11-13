@@ -4,3 +4,7 @@ variable "project_name" {
 variable "backend_url" {
   type = string
 }
+variable "static_ip" {
+  type = string
+  
+}

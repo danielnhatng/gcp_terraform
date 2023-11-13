@@ -1,12 +1,12 @@
 # front-end
-resource "google_compute_forwarding_rule" "nhatnd19_forwarding_rules" {
+resource "google_compute_global_forwarding_rule" "nhatnd19_forwarding_rules" {
     name = "nhatnd19-frontend"
     ip_protocol = "TCP"
     port_range = 80
+    ip_address = var.static_ip
     load_balancing_scheme = "EXTERNAL_MANAGED"
     project = var.project_name
     target = google_compute_target_http_proxy.nhatnd19-proxy.self_link
-    region = "global"
 }
 
 # proxy
